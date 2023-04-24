@@ -7,6 +7,10 @@ const get: RequestHandler = (req, res) => {
   });
 };
 
+const post: RequestHandler = (req, res) => {
+  return res.json({post: true})
+}
+
 export default {
-  get,
+  get, post
 };
