@@ -1,6 +1,23 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+enum SeatType {
+  COMPARTMENT
+  OPEN
+}
+
+enum SeatStatus {
+  ACTIVE
+  RETURNED
+}
+
+enum Discount {
+  NONE
+  STUDENT
+  SENIOR
+  CHILD
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,7 +28,41 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  email String  @unique
-  name  String?
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String   @unique
+  tickets Ticket[]
+}
+
+type Passenger {
+  name     String
+  age      Int
+  email    String
+  discount Discount
+  seat     SeatType
+  status   SeatStatus
+}
+
+model Ticket {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  passengers   Passenger[]
+  user         User        @relation(fields: [userID], references: [id])
+  userID       String      @map("userID") @db.ObjectId
+  connection   Connection  @relation(fields: [connectionID], references: [id])
+  connectionID String      @map("connectionID") @db.ObjectId
+}
+
+type Seats {
+  available Int
+  booked    Int
+  type      SeatType
+}
+
+model Connection {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  capacity  Seats[]
+  tickets   Ticket[]
+  departure DateTime
+  arrival   DateTime
+  price     Float
 }

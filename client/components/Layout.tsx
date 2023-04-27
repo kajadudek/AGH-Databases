@@ -7,7 +7,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <div className="container mx-auto px-4">
       <header className="my-4 flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Next.js + Tailwind CSS</h1>
+        <h1 className="text-4xl font-bold">Podróżnicy</h1>
         {user ? (
           <div>
             <span className="flex items-center space-x-2">
