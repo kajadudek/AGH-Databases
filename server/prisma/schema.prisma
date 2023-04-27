@@ -57,12 +57,20 @@ type Seats {
   type      SeatType
 }
 
+type Station {
+  name    String
+  city    String
+  country String
+}
+
 model Connection {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  capacity  Seats[]
-  tickets   Ticket[]
-  departure DateTime
-  arrival   DateTime
-  price     Float
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  capacity         Seats[]
+  tickets          Ticket[]
+  departure        DateTime
+  departureStation Station
+  arrival          DateTime
+  arrivalStation   Station
+  price            Float
 }
