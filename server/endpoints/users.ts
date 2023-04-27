@@ -5,10 +5,10 @@ import { prisma } from "./prisma";
 const app = express()
 
 const get: RequestHandler = async (req, res) => {
-    const connections = await prisma.connection.findMany();
+    const users = await prisma.user.findMany();
   return res.json({
     hello:
-      "",
+      "user",
   });
 };
 

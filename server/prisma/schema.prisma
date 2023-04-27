@@ -35,8 +35,6 @@ model User {
 
 type Passenger {
   name     String
-  age      Int
-  email    String
   discount Discount
   seat     SeatType
   status   SeatStatus
