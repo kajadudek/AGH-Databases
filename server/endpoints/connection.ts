@@ -8,7 +8,7 @@ const get: RequestHandler = async (req, res) => {
     const connections = await prisma.connection.findMany();
   return res.json({
     hello:
-      "",
+      "connections",
   });
 };
 
