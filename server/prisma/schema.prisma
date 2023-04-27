@@ -47,6 +47,7 @@ model Ticket {
   userID       String      @map("userID") @db.ObjectId
   connection   Connection  @relation(fields: [connectionID], references: [id])
   connectionID String      @map("connectionID") @db.ObjectId
+  price        Float
 }
 
 type Seats {
