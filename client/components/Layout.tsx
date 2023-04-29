@@ -1,8 +1,8 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
 import { FC, PropsWithChildren } from "react";
-import { Sigmar_One } from 'next/font/google'
 import Menu from "./Menu";
+import { Dropdown } from "flowbite-react";
 
 export const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { user } = useUser();
@@ -34,6 +34,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
           </Link>
         )}
       </header>
+
       <Menu />
       <main>{children}</main>
     </div>
