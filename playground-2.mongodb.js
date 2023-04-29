@@ -9,6 +9,8 @@
 // For more documentation on playgrounds please refer to
 // https://www.mongodb.com/docs/mongodb-vscode/playgrounds/
 
+// import { SeatType } from "./prisma";
+
 // Select the database to use.
 use("test");
 
