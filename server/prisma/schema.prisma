@@ -27,6 +27,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model DiscountValue {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  discount Discount
+  value    Float
+}
+
 model User {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   email   String   @unique

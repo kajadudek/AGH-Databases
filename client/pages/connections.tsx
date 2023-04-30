@@ -1,6 +1,7 @@
 import { fetchClient } from "@/services/fetchClient";
 import { FC, useEffect, useState } from "react";
 import { z } from "zod";
+import { type SeatType } from "../../server/types";
 
 const Example: FC = () => {
   const [data, setData] = useState<{ hello: string } | null>(null);
