@@ -5,10 +5,16 @@ import { SeatType } from "@prisma/client";
 const app = express();
 
 const get: RequestHandler = async (req, res) => {
-  const connections = await prisma.connection.findMany();
-  return res.json({
-    hello: "connection",
+  const connection = await prisma.connection.findUnique({
+    where: {
+      id: req.body.connectionId,
+    },
   });
+  if (!connection) {
+    return res.status(500).json({ error: "Connection not found" });
+  } else {
+    return res.json(connection);
+  }
 };
 
 const post: RequestHandler = async (req, res) => {
