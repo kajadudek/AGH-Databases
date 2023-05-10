@@ -13,12 +13,14 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
 
         {user ? (
           <div>
-            <span className="flex items-center space-x-2">
-              Hello {user.name}
-            </span>
+            <div className="mr-8 px-8">
+              <span className="flex items-center space-x-2 mr-4">
+                Hello {user.name}
+              </span>
+            </div>
             <span>{user.email}</span>
             <Link
-              className="rounded-sm p-1 bg-red-600 text-red-50"
+              className="bg-slate-900 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded my-0"
               href="/api/auth/logout"
             >
               Logout
@@ -26,7 +28,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
           </div>
         ) : (
           <Link
-            className="rounded-sm bg-green-600 text-green-50"
+            className="bg-orange-700 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded my-0"
             href="/api/auth/login"
           >
             Login

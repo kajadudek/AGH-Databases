@@ -4,9 +4,10 @@ import { prisma } from "./prisma";
 const app = express();
 
 const get: RequestHandler = async (req, res) => {
-  const users = await prisma.user.findMany();
-  return res.json({
-    hello: "user",
+  const user = await prisma.user.findUnique({
+    where: {
+      email: req.body.email,
+    },
   });
 };
 
