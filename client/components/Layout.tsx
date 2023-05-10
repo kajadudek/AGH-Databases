@@ -8,8 +8,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { user } = useUser();
   return (
     <div className="container mx-auto">
-      <header className="mt-4 py-4 w-full flex justify-between items-center border-spacing-2 border-cyan-900 border-b-2">
-
+      <header className="mt-4 z-1 py-4 w-full flex justify-between items-center border-spacing-2 border-cyan-900 border-b-2 bg-inherit h-90 ">
         <h1 className="text-4xl font-logo">Podróżnicy</h1>
 
         {user ? (
@@ -34,8 +33,9 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
           </Link>
         )}
       </header>
-
-      <Menu />
+      <div className="z-0">
+        <Menu />
+      </div>
       <main>{children}</main>
     </div>
   );
