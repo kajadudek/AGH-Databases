@@ -5,6 +5,7 @@ const app = express();
 
 const get: RequestHandler = async (req, res) => {
   let connections;
+  console.log("cos");
   if (req.body.dateType === "departure") {
     connections = await prisma.connection.findMany({
       where: {

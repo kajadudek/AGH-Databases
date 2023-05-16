@@ -10,8 +10,8 @@ const Menu: FC = () => {
       <Link className="p-2" href={"/"}>
         Home Page
       </Link>
-      <Link className="p-2" href={"/example"}>
-        Example Page
+      <Link className="p-2" href={"/connections"}>
+        Connections
       </Link>
     </nav>
   );

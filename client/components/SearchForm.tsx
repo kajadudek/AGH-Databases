@@ -3,7 +3,10 @@ import { FC } from "react";
 
 const SearchForm: FC = () => {
   return (
-    <form className="flex flex-col items-center justify-center">
+    <form
+      onSubmit={(data) => console.log(data)}
+      className="flex flex-col items-center justify-center"
+    >
       <div>
         <div>
           <input
@@ -46,14 +49,12 @@ const SearchForm: FC = () => {
           />
         </div>
       </div>
-      <Link href="/connections">
-        <button
-          className="bg-slate-900 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded my-4"
-          type="submit"
-        >
-          Search
-        </button>
-      </Link>
+      <button
+        className="bg-slate-900 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded my-4"
+        type="submit"
+      >
+        Search
+      </button>
     </form>
   );
 };
