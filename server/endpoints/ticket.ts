@@ -28,7 +28,6 @@ const post: RequestHandler = async (req, res) => {
   if (!connection) {
     return res.status(500).json({ error: "Connection not found" });
   }
-
   const ticket = await prisma.ticket.create({
     data: {
       passengers: data.passengers,
