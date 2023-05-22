@@ -5,14 +5,6 @@ import { Discount } from "@prisma/client";
 
 const app = express();
 
-const get: RequestHandler = async (req, res) => {
-  const tickets = await prisma.ticket.findMany();
-  return res.json({
-    hello:
-      "Hello from a private endpoint! You need to be authenticated to see this.",
-  });
-};
-
 const passengerSchema = z.object({
   name: z.string(),
   discount: z.enum(["NONE", "CHILD", "STUDENT", "SENIOR"]),
@@ -51,6 +43,14 @@ const post: RequestHandler = async (req, res) => {
         },
       },
       price: req.body.price,
+    },
+  });
+  return res.json(ticket);
+};
+const get: RequestHandler = async (req, res) => {
+  const ticket = await prisma.ticket.findUnique({
+    where: {
+      id: req.body.ticketId,
     },
   });
   return res.json(ticket);
