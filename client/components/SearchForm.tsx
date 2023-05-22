@@ -1,5 +1,7 @@
+import { RangeSlider } from "flowbite-react";
 import Link from "next/link";
 import { FC } from "react";
+import PriceSlider from "./PriceSlider";
 
 const SearchForm: FC = () => {
   return (
@@ -7,10 +9,10 @@ const SearchForm: FC = () => {
       onSubmit={(data) => console.log(data)}
       className="flex flex-col items-center justify-center"
     >
-      <div>
-        <div>
+      <div className="flex flex-row">
+        <div className="flex flex-col">
           <input
-            className="rounded-md border-2 mr-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
+            className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
             type="search"
             name="search"
             placeholder="Departure Station"
@@ -27,10 +29,13 @@ const SearchForm: FC = () => {
             name="time"
             placeholder="Time"
           />
+          <div className="ml-2">
+            <PriceSlider />
+          </div>
         </div>
-        <div>
+        <div className="flex flex-col">
           <input
-            className="rounded-md border-2 mr-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
+            className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
             type="search"
             name="search"
             placeholder="Arrival Station"
@@ -47,6 +52,9 @@ const SearchForm: FC = () => {
             name="time"
             placeholder="Time"
           />
+          <div className="ml-2">
+            <PriceSlider />
+          </div>
         </div>
       </div>
       <button

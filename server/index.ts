@@ -5,6 +5,8 @@ import connectionsByDate from "./endpoints/connectionsByDate";
 import user from "./endpoints/users";
 import { jwtCheck } from "./auth";
 import env from "./env";
+import ticket from "./endpoints/ticket";
+import tickets from "./endpoints/tickets";
 
 const app: Express = express();
 const port = env.PORT;
@@ -20,6 +22,9 @@ app.post("/example", jwtCheck, example.post);
 app.get("/connection", connection.get);
 app.post("/connection", connection.post);
 app.get("/connectionsByDate", connectionsByDate.get);
+app.get("/ticket", jwtCheck, ticket.get);
+app.post("/ticket", ticket.post);
+app.get("/tickets", jwtCheck, tickets.get);
 app.get("/user", user.get);
 app.post("/user", user.post);
 app.listen(port, () => {
