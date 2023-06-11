@@ -7,7 +7,8 @@ const Connections: FC = () => {
   const [paths, setPaths] = useState<
     Array<{ stations: string[], travelTime: number, arrivalTime: number, totalPrice: number, connectionIds: string[] }>>([]);
   const [selectedPathIndex, setSelectedPathIndex] = useState<number | null>(null);
-  const [passengers, setPassengers] = useState<Array<{ discount: string, seat: string }>>([{ discount: 'NONE', seat: 'OPEN' }]);
+  const [passengers, setPassengers] = useState<Array<{ name: string, discount: string, seat: string, status: string }>
+  >([]);
 
   // Routes finding
   const handleFormSubmit = async (departure: string, arrival: string) => {
@@ -35,7 +36,7 @@ const Connections: FC = () => {
 
   // Handle ticket passengers properties
   const handleAddPassenger = () => {
-    setPassengers(prev => [...prev, { discount: 'NONE', seat: 'OPEN' }]);
+    setPassengers(prev => [...prev, { name: 'passenger', discount: 'NONE', seat: 'OPEN', status: 'ACTIVE' }]);
   };
 
   const handleRemovePassenger = (index: number) => {
@@ -65,17 +66,50 @@ const Connections: FC = () => {
       return;
     }
   
-    const email = "email@email.com"; // Replace with the email of the currently logged in user
-    const connectionId = paths[selectedPathIndex].connectionIds[0]; // Replace with the id of the selected path
+    // TODO - replacing with the email of currently logged in user
+    const email = "jhon.doe@gee.com";
   
     console.log(passengers, paths[selectedPathIndex].connectionIds, paths[selectedPathIndex].totalPrice);
+    
+    for (const connectionId of paths[selectedPathIndex].connectionIds){
+      const response = await fetchClientPost({
+      endpoint: 'api/ticket',
+      body: {
+        email: email,
+        connectionId: connectionId,
+        passengers: passengers,
+        price: paths[selectedPathIndex].totalPrice
+      },
+      schema: z.object({
+        passengers: z.array(
+          z.object({
+            name: z.string(),
+            discount: z.enum(["NONE", "CHILD", "STUDENT", "SENIOR"]),
+            seat: z.enum(["OPEN", "COMPARTMENT"]),
+            status: z.enum(["ACTIVE", "RETURNED"]),
+          })
+        ),
+        connection: z.object({
+          id: z.string()
+        }),
+        price: z.number(),
+      }),
+      });
+
+      if (!response.ok) {
+        console.error("Error buying tickets:", response.error);
+      } else {
+        console.log(response.data);
+      }
+    }
   };
 
   return (
     <div className="p-5 my-5">
       <SearchForm onSubmit={handleFormSubmit}/>
 
-      <h1>Dostępne połączenia</h1>
+      {paths.length === 0 ? (<h1 className="font-bold text-xl mb-5">Brak dostępnych połączeń</h1>) 
+      : (<h1 className="font-bold text-xl mb-5">Dostępne połączenia:</h1>)}
 
       <ul>
         {paths.map((path, index) => {
@@ -94,7 +128,7 @@ const Connections: FC = () => {
               <div className="flex flex-col items-end space-x-2 px-8">
                 <button className="bg-orange-500 text-white px-4 py-2 h-10 rounded-md" onClick={() => {
                     setSelectedPathIndex(index);
-                    setPassengers([{ discount: 'NONE', seat: 'OPEN' }]);
+                    setPassengers([{ name: 'passenger', discount: 'NONE', seat: 'OPEN', status: 'ACTIVE' }]);
                 }}>
                   <b>Cena:</b> {path.totalPrice}
                 </button>
