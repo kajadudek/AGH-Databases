@@ -91,7 +91,7 @@ const Connections: FC = () => {
                 <br />
                 <b>Przesiadki:</b> {path.stations.length - 2}
               </div>
-              <div className="px-8">
+              <div className="flex flex-col items-end space-x-2 px-8">
                 <button className="bg-orange-500 text-white px-4 py-2 h-10 rounded-md" onClick={() => {
                     setSelectedPathIndex(index);
                     setPassengers([{ discount: 'NONE', seat: 'OPEN' }]);
@@ -114,18 +114,18 @@ const Connections: FC = () => {
                         </select>
                       </label>
                       <label>
-                        Miejsce:
+                        Wagon:
                         <select name="seat" onChange={(e) => handleSeatChange(e, i)} className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                          <option value="OPEN">Open</option>
-                          <option value="COMPARTMENT">Compartment</option>
+                          <option value="OPEN">Bezprzedziałowy</option>
+                          <option value="COMPARTMENT">Przedziałowy</option>
                         </select>
                       </label>
                     </form>
-                    <button className="bg-orange-500 text-white px-2 py-5 rounded-md m-1" onClick={handleAddPassenger}>+</button>
-                    <button className="bg-orange-500 text-white px-2 py-5 rounded-md m-1" onClick={() => handleRemovePassenger(i)}>-</button>
+                    <button className="text-orange-500 px-2 py-2 rounded-md m-1 mt-5" onClick={handleAddPassenger}><b>+</b></button>
+                    <button className="text-orange-500 px-2 py-2 rounded-md m-1 mt-5" onClick={() => handleRemovePassenger(i)}><b>-</b></button>
                   </div>
                 ))}
-                <button className="bg-orange-500 text-white px-2 py-3 rounded-md m-1" onClick={handleBuyTickets}>Kup Bilety</button>
+                <button className="bg-black text-white px-8 py-3 rounded-md m-1 mt-3" onClick={handleBuyTickets}>Kup bilety</button>
                 </>
               }
               </div>
