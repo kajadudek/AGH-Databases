@@ -52,9 +52,20 @@ const post: RequestHandler = async (req, res) => {
   return res.json(newConnection);
 };
 
+const findPaths: RequestHandler = async (req, res) => {
+  const { start, end } = req.body;
+  try {
+    const paths = await findAllPaths(start, end);
+    return res.json(paths);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+};
+
 export default {
   get,
   post,
+  findPaths
 };
 
 type Connection = {
@@ -65,7 +76,6 @@ type Connection = {
   arrival: Date;
   price: number;
 };
-
 
 const getConnections = async (): Promise<Connection[]> => {
   const connection = await prisma.connection.findMany();
@@ -80,74 +90,6 @@ const getConnections = async (): Promise<Connection[]> => {
   return data;
 };
 
-// Finds the shortest path (by the time of travel, excluding stops)
-const dijkstra = async (source: string, target: string) => {
-  const connections = await getConnections();
-
-  // budujemy graf
-  const graph: { [key: string]: { [key: string]: number } } = {};
-  for (let connection of connections) {
-    if (!graph[connection.departureStation]) {
-      graph[connection.departureStation] = {};
-    }
-    // zakładamy, że czas podróży to nasza waga
-    const travelTime = connection.arrival.getTime() - connection.departure.getTime();
-    graph[connection.departureStation][connection.arrivalStation] = travelTime;
-  }
-
-  // algorytm Dijkstry
-  const Q = new Set(Object.keys(graph));
-  const dist: { [key: string]: number } = {};
-  const prev: { [key: string]: string | null } = {};
-  for (let node of Q) {
-    dist[node] = Infinity;
-    prev[node] = null;
-  }
-  dist[source] = 0;
-
-  while (Q.size) {
-    let minDist = Infinity;
-    let u = "";
-    for (let node of Q) {
-      if (dist[node] < minDist) {
-        minDist = dist[node];
-        u = node;
-      }
-    }
-
-    Q.delete(u);
-
-    for (let neighbor in graph[u]) {
-      const alt = dist[u] + graph[u][neighbor];
-      if (alt < dist[neighbor]) {
-        dist[neighbor] = alt;
-        prev[neighbor] = u;
-      }
-    }
-  }
-
-  // odtwarzamy najkrótszą ścieżkę
-  let u = target;
-  const path = [];
-  let travelTime = 0;
-
-  while (prev[u]) {
-    path.unshift(u);
-    travelTime += graph[prev[u]][u];
-    u = prev[u]!;
-  }
-  path.unshift(u);
-
-  const travelTimeInHours = travelTime / (1000 * 60 * 60);
-
-  return { path, travelTime: travelTimeInHours };
-};
-
-// Przykładowe wywołanie
-// dijkstra("Katowice", "Warszawa").then(path => console.log(path));
-// dijkstra("Warszawa", "Katowice").then(path => console.log(path));
-
-
 // Finds all paths (has regard to arrival and departure time of trains)
 type Path = {
   stations: string[];
@@ -155,7 +97,7 @@ type Path = {
   arrivalTime: number; // time in milliseconds
 };
 
-const findAllPaths = async (
+export const findAllPaths = async (
   start: string,
   end: string,
   arrivalTime: number = 0,
@@ -205,22 +147,3 @@ const findAllPaths = async (
   // Zwracamy posortowaną listę połączeń po czasie trwania (nie wliczamy postojów)
   return paths.sort((a, b) => a.travelTime - b.travelTime);
 };
-
-// Przykładowe wywołanie (prawidłowo nie znajduje ścieżki Katowice -> Tychy -> Poznań, bo nie ma czasu na przesiadkę)
-findAllPaths("Katowice", "Poznań").then(paths => {  
-  paths.forEach(path => {
-    console.log(`Path: ${path.stations.join(" -> ")}, Travel Time: ${path.travelTime/3600000} hours`);
-  });
-});
-
-findAllPaths("Tychy", "Warszawa").then(paths => {  
-  paths.forEach(path => {
-    console.log(`Path: ${path.stations.join(" -> ")}, Travel Time: ${path.travelTime/3600000} hours`);
-  });
-});
-
-findAllPaths("Poznań", "Tychy").then(paths => {  
-  paths.forEach(path => {
-    console.log(`Path: ${path.stations.join(" -> ")}, Travel Time: ${path.travelTime/3600000} hours`);
-  });
-});
