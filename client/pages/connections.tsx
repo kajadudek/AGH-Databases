@@ -5,7 +5,7 @@ import { type SeatType } from "../../server/types";
 // import Connection from "../types/Connection";
 import SearchForm from "@/components/SearchForm";
 
-const Example: FC = () => {
+const Connections: FC = () => {
   const [paths, setPaths] = useState<
     Array<{ stations: string[], travelTime: number,
        arrivalTime: number, totalPrice: number }>>([]);

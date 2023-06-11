@@ -11,7 +11,7 @@ const get: RequestHandler = async (req, res) => {
       },
     },
   });
-  return res.json(tickets);
+  return res.json({tickets});
 };
 
 export default {
