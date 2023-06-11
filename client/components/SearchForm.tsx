@@ -1,7 +1,6 @@
 import { RangeSlider } from "flowbite-react";
 import Link from "next/link";
 import { FC } from "react";
-import PriceSlider from "./PriceSlider";
 
 const SearchForm: FC = () => {
   return (
@@ -29,9 +28,6 @@ const SearchForm: FC = () => {
             name="time"
             placeholder="Time"
           />
-          <div className="ml-2">
-            <PriceSlider />
-          </div>
         </div>
         <div className="flex flex-col">
           <input
@@ -52,9 +48,6 @@ const SearchForm: FC = () => {
             name="time"
             placeholder="Time"
           />
-          <div className="ml-2">
-            <PriceSlider />
-          </div>
         </div>
       </div>
       <button
