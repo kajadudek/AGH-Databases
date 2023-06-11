@@ -68,7 +68,7 @@ const Connections: FC = () => {
     const email = "email@email.com"; // Replace with the email of the currently logged in user
     const connectionId = paths[selectedPathIndex].connectionIds[0]; // Replace with the id of the selected path
   
-    console.log(passengers, connectionId, paths[selectedPathIndex].totalPrice);
+    console.log(passengers, paths[selectedPathIndex].connectionIds, paths[selectedPathIndex].totalPrice);
   };
 
   return (
@@ -92,7 +92,10 @@ const Connections: FC = () => {
                 <b>Przesiadki:</b> {path.stations.length - 2}
               </div>
               <div className="px-8">
-                <button className="bg-orange-500 text-white px-4 py-2 h-10 rounded-md" onClick={() => setSelectedPathIndex(index)}>
+                <button className="bg-orange-500 text-white px-4 py-2 h-10 rounded-md" onClick={() => {
+                    setSelectedPathIndex(index);
+                    setPassengers([{ discount: 'NONE', seat: 'OPEN' }]);
+                }}>
                   <b>Cena:</b> {path.totalPrice}
                 </button>
 
