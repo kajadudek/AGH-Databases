@@ -6,7 +6,8 @@ import SearchForm from "@/components/SearchForm";
 
 const Example: FC = () => {
   const [paths, setPaths] = useState<
-    Array<{ stations: string[], travelTime: number, arrivalTime: number }>>([]);
+    Array<{ stations: string[], travelTime: number,
+       arrivalTime: number, totalPrice: number }>>([]);
 
     const handleFormSubmit = async (departure: string, arrival: string) => {   
       const response = await fetchClientPost({
@@ -16,7 +17,8 @@ const Example: FC = () => {
           z.object({
             stations: z.array(z.string()),
             travelTime: z.number(),
-            arrivalTime: z.number()
+            arrivalTime: z.number(),
+            totalPrice: z.number()
           })
         )
       });
@@ -43,10 +45,20 @@ const Example: FC = () => {
             const formattedTime = hours + ' godzin i ' + minutes + ' minut';
     
             return (
-              <li key={index}>
-                Stacje: {formattedStations}, Czas podróży: {formattedTime}, Przesiadki: {path.stations.length - 2}
+              <li key={index} className="flex items-center justify-between h-16">
+                <div>
+                  <b>Stacje:</b> {formattedStations}, <b>Czas podróży:</b> {formattedTime}
+                  <br />
+                  <b>Przesiadki:</b> {path.stations.length - 2}
+                </div>
+                <div>
+                  <button className="bg-orange-500 text-white px-4 py-2 h-10 rounded-md">
+                    <b>Cena:</b> {path.totalPrice}
+                  </button>
+                </div>
               </li>
-            );
+            );            
+                       
           })}
         </ul>
       </div>
