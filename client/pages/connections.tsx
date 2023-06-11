@@ -1,14 +1,17 @@
-import { FC, useEffect, useState, FormEvent, ChangeEvent } from "react";
+import { FC, useEffect, useState} from "react";
 import { z } from "zod";
-import { fetchClient, fetchClientPost } from "@/services/fetchClient";
+import { fetchClientPost } from "@/services/fetchClient";
 import SearchForm from "@/components/SearchForm";
+import { useUser } from '@auth0/nextjs-auth0/client';
+
 
 const Connections: FC = () => {
   const [paths, setPaths] = useState<
     Array<{ stations: string[], travelTime: number, arrivalTime: number, totalPrice: number, connectionIds: string[] }>>([]);
   const [selectedPathIndex, setSelectedPathIndex] = useState<number | null>(null);
-  const [passengers, setPassengers] = useState<Array<{ name: string, discount: string, seat: string, status: string }>
-  >([]);
+  const [passengers, setPassengers] = useState<Array<{ name: string, discount: string, seat: string, status: string }>>([]);
+  const { user } = useUser();
+
 
   // Routes finding
   const handleFormSubmit = async (departure: string, arrival: string) => {
@@ -65,11 +68,7 @@ const Connections: FC = () => {
       console.error("No path selected");
       return;
     }
-  
-    // TODO - replacing with the email of currently logged in user
-    const email = "jhon.doe@gee.com";
-  
-    console.log(passengers, paths[selectedPathIndex].connectionIds, paths[selectedPathIndex].totalPrice);
+    const email = user?.email;
     
     for (const connectionId of paths[selectedPathIndex].connectionIds){
       const response = await fetchClientPost({

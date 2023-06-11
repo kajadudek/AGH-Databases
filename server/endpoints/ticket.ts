@@ -28,6 +28,9 @@ const post: RequestHandler = async (req, res) => {
   if (!connection) {
     return res.status(500).json({ error: "Connection not found" });
   }
+
+  const totalPrice = await calculateTicketPrice(data.passengers, req.body.price);
+
   const ticket = await prisma.ticket.create({
     data: {
       passengers: data.passengers,
@@ -41,7 +44,7 @@ const post: RequestHandler = async (req, res) => {
           id: data.connectionId,
         },
       },
-      price: req.body.price,
+      price: totalPrice,
     },
   });
   return res.json(ticket);
@@ -59,3 +62,30 @@ export default {
   get,
   post,
 };
+
+type Passenger = {
+  name: string,
+  discount: Discount,
+  seat: string,
+  status: string
+}
+
+const calculateTicketPrice = async (passengers: Passenger[], ticketPrice: number) => {
+  let totalPrice = 0;
+
+  for (let passenger of passengers) {
+    const discountValue = await prisma.discountValue.findFirst({
+      where: { 
+        discount: passenger.discount 
+      }
+    });
+
+    if (discountValue) {
+      totalPrice += ticketPrice - (ticketPrice * discountValue.value);
+    } else {
+      totalPrice += ticketPrice;
+    }
+  }
+  
+  return totalPrice;
+}
