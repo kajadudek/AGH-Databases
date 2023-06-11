@@ -95,6 +95,7 @@ type Path = {
   stations: string[];
   travelTime: number; // hours
   arrivalTime: number; // time in milliseconds
+  totalPrice: number;
 };
 
 // export const findAllPaths = async (
