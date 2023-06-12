@@ -28,12 +28,21 @@ const post: RequestHandler = async (req, res) => {
   if (!connection) {
     return res.status(500).json({ error: "Connection not found" });
   }
+  const buyer = await prisma.user.findUnique({
+    where: {
+      email: data.email,
+    },
+  });
+  if (!buyer) {
+    return res.status(500).json({ error: "User not found" });
+  }
+  console.log(buyer.id);
   const ticket = await prisma.ticket.create({
     data: {
       passengers: data.passengers,
       user: {
         connect: {
-          email: data.email,
+          id: buyer.id,
         },
       },
       connection: {
@@ -42,6 +51,18 @@ const post: RequestHandler = async (req, res) => {
         },
       },
       price: req.body.price,
+    },
+  });
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: buyer.id,
+    },
+    data: {
+      tickets: {
+        connect: {
+          id: ticket.id,
+        },
+      },
     },
   });
   return res.json(ticket);

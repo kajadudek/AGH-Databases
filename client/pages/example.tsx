@@ -14,7 +14,7 @@ const Example: FC = () => {
       }
       return null;
     }).then((res => setData(res)))
-  }
+  }, []
   );
 
   return (
