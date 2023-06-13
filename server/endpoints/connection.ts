@@ -95,19 +95,26 @@ type Path = {
   stations: string[];
   travelTime: number; // hours
   arrivalTime: number; // time in milliseconds
+  departureTime: number;
   totalPrice: number;
   connectionIds: string[];
+  departureDate: Date;
+  arrivalDate: Date;
 };
+
 
 export const findAllPaths = async (
   start: string,
   end: string,
   arrivalTime: number = 0,
+  departureTime: number = 0, // New parameter
   visited: { [key: string]: boolean } = {},
   path: string[] = [],
   travelTime: number = 0,
   totalPrice: number = 0,
-  connectionIds: string[] = []
+  connectionIds: string[] = [],
+  departureDate: Date = new Date(), // New parameter
+  arrivalDate: Date = new Date() // New parameter
 ): Promise<Path[]> => {
   const connections = await getConnections();
 
@@ -131,8 +138,11 @@ export const findAllPaths = async (
       stations: [...path],
       travelTime: travelTime,
       arrivalTime,
+      departureTime,
       totalPrice,
-      connectionIds: [...connectionIds]
+      connectionIds: [...connectionIds],
+      departureDate: departureDate,
+      arrivalDate: arrivalDate
     });
   } else {
     // Jeśli nie, to dla nieodwiedzonych miast dodajemy je do ścieżki
@@ -146,11 +156,14 @@ export const findAllPaths = async (
             node,
             end,
             connection.arrival.getTime(),
+            departureTime === 0 ? connection.departure.getTime() : departureTime,
             visited,
             path,
             travelTime + connection.arrival.getTime() - connection.departure.getTime(),
             totalPrice + connection.price,
-            [...connectionIds, connection._id]
+            [...connectionIds, connection._id],
+            departureTime === 0 ? connection.departure : departureDate, // New parameter
+            connection.arrival // New parameter
           )
         );
       }

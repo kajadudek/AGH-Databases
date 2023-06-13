@@ -7,14 +7,15 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 
 const Connections: FC = () => {
   const [paths, setPaths] = useState<
-    Array<{ stations: string[], travelTime: number, arrivalTime: number, totalPrice: number, connectionIds: string[] }>>([]);
+    Array<{ stations: string[], travelTime: number, arrivalTime: number, departureTime: number, totalPrice: number, connectionIds: string[], departureDate: string,
+      arrivalDate: string }>>([]);
   const [selectedPathIndex, setSelectedPathIndex] = useState<number | null>(null);
   const [passengers, setPassengers] = useState<Array<{ name: string, discount: string, seat: string, status: string }>>([]);
   const { user } = useUser();
 
 
   // Routes finding
-  const handleFormSubmit = async (departure: string, arrival: string) => {
+  const handleFormSubmit = async (departure: string, arrival: string, departureTime: string, arrivalTime: string) => {
     const response = await fetchClientPost({
       endpoint: 'api/paths',
       body: { start: departure, end: arrival },
@@ -23,8 +24,11 @@ const Connections: FC = () => {
           stations: z.array(z.string()),
           travelTime: z.number(),
           arrivalTime: z.number(),
+          departureTime: z.number(),
           totalPrice: z.number(),
-          connectionIds: z.array(z.string())
+          connectionIds: z.array(z.string()),
+          departureDate: z.string(),
+          arrivalDate: z.string()
         })
       )
     });
@@ -32,10 +36,43 @@ const Connections: FC = () => {
     if (!response.ok) {
       console.error(response.error);
     } else {
-      console.log(response.data);
-      setPaths(response.data);
+      if (departureTime || arrivalTime){
+        findTimeBoundedRoutes(departureTime, arrivalTime, response);
+      } else {
+        setPaths(response.data);
+      }
     }
   };
+
+  // Filters routes according to user's desired departure/arrival time
+  const findTimeBoundedRoutes = (departureTime: string, arrivalTime: string, response: { ok?: true; data: any; }) => {
+    let filteredPaths = response.data;
+
+    if (departureTime){
+      const formDepartureHours = Number(departureTime.split(':')[0]) - 1;
+      const formDepartureMinutes = Number(departureTime.split(':')[1]);
+      const formDepartureTotalMinutes = formDepartureHours * 60 + formDepartureMinutes;
+
+      filteredPaths = filteredPaths.filter((path: any) => {
+        const pathDepartureDate = new Date(path.departureTime);
+        const pathDepartureTotalMinutes = pathDepartureDate.getUTCHours() * 60 + pathDepartureDate.getUTCMinutes();
+        return pathDepartureTotalMinutes >= formDepartureTotalMinutes;
+      });
+    } 
+    if (arrivalTime){
+      const formArrivalHours = Number(arrivalTime.split(':')[0]) - 1;
+      const formArrivalMinutes = Number(arrivalTime.split(':')[1]);
+      const formArrivalTotalMinutes = formArrivalHours * 60 + formArrivalMinutes;
+
+      filteredPaths = filteredPaths.filter((path: any) => {
+        const pathArrivalDate = new Date(path.arrivalTime);
+        const pathArrivalTotalMinutes = pathArrivalDate.getUTCHours() * 60 + pathArrivalDate.getUTCMinutes();
+        return pathArrivalTotalMinutes <= formArrivalTotalMinutes;
+      });
+    }
+
+    setPaths(filteredPaths);
+  }
 
   // Handle ticket passengers properties
   const handleAddPassenger = () => {
@@ -116,13 +153,17 @@ const Connections: FC = () => {
           const hours = Math.floor(path.travelTime / 3600000);
           const minutes = Math.floor((path.travelTime % 3600000) / 60000);
           const formattedTime = hours + ' godzin i ' + minutes + ' minut';
+          const departureDate = new Date(path.departureTime);
+          const formattedDepartureTime = departureDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+          const arrivalDate = new Date(path.arrivalTime);
+          const formattedArrivalTime = arrivalDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
           return (
             <li key={index} className="flex items-center justify-between min-h-16">
               <div>
                 <b>Stacje:</b> {formattedStations}, <b>Czas podróży:</b> {formattedTime}
                 <br />
-                <b>Przesiadki:</b> {path.stations.length - 2}
+                <b>Przesiadki:</b> {path.stations.length - 2}, <b>Czas odjazdu: </b> {formattedDepartureTime}, <b>Czas przyjazdu: </b> {formattedArrivalTime}
               </div>
               <div className="flex flex-col items-end space-x-2 px-8">
                 <button className="bg-orange-500 text-white px-4 py-2 h-10 rounded-md" onClick={() => {
