@@ -1,5 +1,6 @@
 import { fetchClient } from "@/services/fetchClient";
-import { FC, useEffect, useState } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { FC, use, useEffect, useState } from "react";
 import { z } from "zod";
 
 type TicketElement = {
@@ -8,7 +9,7 @@ type TicketElement = {
 
 const Tickets: FC = () => {
   const [tickets, setData] = useState<TicketElement[]>([]);
-
+  const {user} = useUser();
   useEffect(() => {
     fetchClient({
       endpoint: "/api/tickets",

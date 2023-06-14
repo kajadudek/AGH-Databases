@@ -69,7 +69,7 @@ const post: RequestHandler = async (req, res) => {
       passengers: data.passengers,
       user: {
         connect: {
-          email: data.email,
+          id: buyer.id,
         },
       },
       connection: {
@@ -87,6 +87,7 @@ const post: RequestHandler = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: "Failed to book ticket because of server error" });
   }
+
 };
 
 const get: RequestHandler = async (req, res) => {
