@@ -28,16 +28,43 @@ const post: RequestHandler = async (req, res) => {
   if (!connection) {
     return res.status(500).json({ error: "Connection not found" });
   }
-  const buyer = await prisma.user.findUnique({
+
+  // Calculate how many seats ticket will take
+  const compartmentPassengers = data.passengers.filter((passenger) => passenger.seat === "COMPARTMENT").length;
+  const openPassengers = data.passengers.filter((passenger) => passenger.seat === "OPEN").length;
+
+  const compartmentCapacity = connection.capacity.find((capacity) => capacity.type === "COMPARTMENT");
+  const openCapacity = connection.capacity.find((capacity) => capacity.type === "OPEN");
+
+  if (!compartmentCapacity || compartmentCapacity.available < compartmentPassengers) {
+    return res.status(400).json({ error: "Not enough compartment seats available" });
+  }
+
+  if (!openCapacity || openCapacity.available < openPassengers) {
+    return res.status(400).json({ error: "Not enough open seats available" });
+  }
+
+  compartmentCapacity.available -= compartmentPassengers;
+  compartmentCapacity.booked += compartmentPassengers;
+
+  openCapacity.available -= openPassengers;
+  openCapacity.booked += openPassengers;
+
+  // Calculate total price of ticket
+  const totalPrice = await calculateTicketPrice(data.passengers, req.body.price);
+
+  // Change the capacity of train
+  const updateConnection = prisma.connection.update({
     where: {
-      email: data.email,
+      id: data.connectionId,
+    },
+    data: {
+      capacity: connection.capacity,
     },
   });
-  if (!buyer) {
-    return res.status(500).json({ error: "User not found" });
-  }
-  console.log(buyer.id);
-  const ticket = await prisma.ticket.create({
+
+  // Create tickets
+  const createTicket = prisma.ticket.create({
     data: {
       passengers: data.passengers,
       user: {
@@ -50,23 +77,19 @@ const post: RequestHandler = async (req, res) => {
           id: data.connectionId,
         },
       },
-      price: req.body.price,
+      price: totalPrice,
     },
   });
-  const updatedUser = await prisma.user.update({
-    where: {
-      id: buyer.id,
-    },
-    data: {
-      tickets: {
-        connect: {
-          id: ticket.id,
-        },
-      },
-    },
-  });
-  return res.json(ticket);
+
+  try {
+    const [updatedConnection, ticket] = await prisma.$transaction([updateConnection, createTicket]);
+    return res.json(ticket);
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to book ticket because of server error" });
+  }
+
 };
+
 const get: RequestHandler = async (req, res) => {
   const ticket = await prisma.ticket.findUnique({
     where: {
@@ -80,3 +103,30 @@ export default {
   get,
   post,
 };
+
+type Passenger = {
+  name: string,
+  discount: Discount,
+  seat: string,
+  status: string
+}
+
+const calculateTicketPrice = async (passengers: Passenger[], ticketPrice: number) => {
+  let totalPrice = 0;
+
+  for (let passenger of passengers) {
+    const discountValue = await prisma.discountValue.findFirst({
+      where: { 
+        discount: passenger.discount 
+      }
+    });
+
+    if (discountValue) {
+      totalPrice += ticketPrice - (ticketPrice * discountValue.value);
+    } else {
+      totalPrice += ticketPrice;
+    }
+  }
+  
+  return totalPrice;
+}
