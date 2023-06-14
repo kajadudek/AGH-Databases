@@ -7,10 +7,11 @@ const tickets: NextApiHandler = async (req, res) => {
     res,
     endpoint: "tickets",
   });
-
   if (!ticketsData.ok) {
+    console.log("Error fetching tickets:");
     return res.status(500).json({ error: ticketsData.error });
   }
+  console.log(ticketsData.data);
   return res.json(ticketsData.data);
 };
 

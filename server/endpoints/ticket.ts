@@ -1,9 +1,8 @@
-import express, { RequestHandler } from "express";
+import { RequestHandler } from "express";
 import { prisma } from "./prisma";
 import { z } from "zod";
-import { Discount } from "@prisma/client";
-
-const app = express();
+import { PassengerSimplyfied } from "../types";
+import { getUser } from "../getUser";
 
 const passengerSchema = z.object({
   name: z.string(),
@@ -19,6 +18,7 @@ const postSchema = z.object({
 });
 
 const post: RequestHandler = async (req, res) => {
+  const authUser = await getUser(req.auth);
   const data = postSchema.parse(req.body);
   const connection = await prisma.connection.findUnique({
     where: {
@@ -28,12 +28,48 @@ const post: RequestHandler = async (req, res) => {
   if (!connection) {
     return res.status(500).json({ error: "Connection not found" });
   }
-  const ticket = await prisma.ticket.create({
+
+  // Calculate how many seats ticket will take
+  const compartmentPassengers = data.passengers.filter((passenger) => passenger.seat === "COMPARTMENT").length;
+  const openPassengers = data.passengers.filter((passenger) => passenger.seat === "OPEN").length;
+
+  const compartmentCapacity = connection.capacity.find((capacity) => capacity.type === "COMPARTMENT");
+  const openCapacity = connection.capacity.find((capacity) => capacity.type === "OPEN");
+
+  if (!compartmentCapacity || compartmentCapacity.available < compartmentPassengers) {
+    return res.status(400).json({ error: "Not enough compartment seats available" });
+  }
+
+  if (!openCapacity || openCapacity.available < openPassengers) {
+    return res.status(400).json({ error: "Not enough open seats available" });
+  }
+
+  compartmentCapacity.available -= compartmentPassengers;
+  compartmentCapacity.booked += compartmentPassengers;
+
+  openCapacity.available -= openPassengers;
+  openCapacity.booked += openPassengers;
+
+  // Calculate total price of ticket
+  const totalPrice = await calculateTicketPrice(data.passengers, req.body.price);
+
+  // Change the capacity of train
+  const updateConnection = prisma.connection.update({
+    where: {
+      id: data.connectionId,
+    },
+    data: {
+      capacity: connection.capacity,
+    },
+  });
+
+  // Create tickets
+  const createTicket = prisma.ticket.create({
     data: {
       passengers: data.passengers,
       user: {
         connect: {
-          email: data.email,
+          email: authUser?.email,
         },
       },
       connection: {
@@ -41,11 +77,19 @@ const post: RequestHandler = async (req, res) => {
           id: data.connectionId,
         },
       },
-      price: req.body.price,
+      price: totalPrice,
     },
   });
-  return res.json(ticket);
+
+  try {
+    const [updatedConnection, ticket] = await prisma.$transaction([updateConnection, createTicket]);
+    return res.json(ticket);
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to book ticket because of server error" });
+  }
+
 };
+
 const get: RequestHandler = async (req, res) => {
   const ticket = await prisma.ticket.findUnique({
     where: {
@@ -59,3 +103,25 @@ export default {
   get,
   post,
 };
+
+
+
+const calculateTicketPrice = async (passengers: PassengerSimplyfied[], ticketPrice: number) => {
+  let totalPrice = 0;
+
+  for (let passenger of passengers) {
+    const discountValue = await prisma.discountValue.findFirst({
+      where: { 
+        discount: passenger.discount 
+      }
+    });
+
+    if (discountValue) {
+      totalPrice += ticketPrice - (ticketPrice * discountValue.value);
+    } else {
+      totalPrice += ticketPrice;
+    }
+  }
+  
+  return totalPrice;
+}

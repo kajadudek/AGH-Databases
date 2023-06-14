@@ -1,7 +1,6 @@
-import express, { RequestHandler } from "express";
+import { RequestHandler } from "express";
 import { prisma } from "./prisma";
 
-const app = express();
 
 const get: RequestHandler = async (req, res) => {
   let connections;

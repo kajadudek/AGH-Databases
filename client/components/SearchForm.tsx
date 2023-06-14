@@ -1,60 +1,67 @@
 import { RangeSlider } from "flowbite-react";
 import Link from "next/link";
-import { FC } from "react";
-import PriceSlider from "./PriceSlider";
+import { FC, FormEvent, useRef } from "react";
 
-const SearchForm: FC = () => {
+interface SearchFormProps {
+  onSubmit: (departure: string, arrival: string, departureTime: string, arrivalTime: string) => void;
+}
+
+const SearchForm: FC<SearchFormProps> = ({onSubmit}) => {
+  const departureInputRef = useRef<HTMLInputElement>(null);
+  const arrivalInputRef = useRef<HTMLInputElement>(null);
+  const departureTimeInputRef = useRef<HTMLInputElement>(null);
+  const arrivalTimeInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFormSubmit = (event: FormEvent) => {
+    event.preventDefault();
+  
+    const departureStation = departureInputRef.current?.value;
+    const arrivalStation = arrivalInputRef.current?.value;
+    const departureTime = departureTimeInputRef.current?.value || "";
+    const arrivalTime = arrivalTimeInputRef.current?.value || "";
+  
+    if (departureStation && arrivalStation) {
+      onSubmit(departureStation, arrivalStation, departureTime, arrivalTime);
+    }
+  };
+
   return (
     <form
-      onSubmit={(data) => console.log(data)}
+      onSubmit={handleFormSubmit}
       className="flex flex-col items-center justify-center"
     >
       <div className="flex flex-row">
         <div className="flex flex-col">
           <input
+            ref={departureInputRef}
             className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
             type="search"
             name="search"
             placeholder="Departure Station"
           />
           <input
-            className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
-            type="date"
-            name="date"
-            placeholder="Date"
-          />
-          <input
+            ref={departureTimeInputRef}
             className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
             type="time"
             name="time"
             placeholder="Time"
           />
-          <div className="ml-2">
-            <PriceSlider />
-          </div>
         </div>
         <div className="flex flex-col">
           <input
+            ref={arrivalInputRef}
             className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
             type="search"
             name="search"
             placeholder="Arrival Station"
           />
           <input
-            className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
-            type="date"
-            name="date"
-            placeholder="Date"
-          />
-          <input
+            ref={arrivalTimeInputRef}
             className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
             type="time"
             name="time"
             placeholder="Time"
           />
-          <div className="ml-2">
-            <PriceSlider />
-          </div>
         </div>
       </div>
       <button

@@ -8,12 +8,14 @@ type FetchServer = {
   endpoint: string;
   req: NextApiRequest;
   res: NextApiResponse;
+  body?: any;
 };
 
 export const fetchServer = async ({
   endpoint,
   req,
   res,
+  body,
 }: FetchServer): Promise<
   | {
       ok: false;
@@ -42,9 +44,14 @@ export const fetchServer = async ({
   const headers = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : undefined;
-  const response = await fetch(`${BACKEND_URL}${endpoint}`, {
-    headers,
-  });
+    const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+      method: body ? 'POST' : 'GET', // Jeżeli przekazujemy dane to ustawiamy metodę na 'POST'
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json', // Jeżeli przekazujemy dane to potrzebujemy nagłówka
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
   if (response.status === 401) {
     return { ok: false, error: "Unauthorized" };
   }

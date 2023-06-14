@@ -21,6 +21,7 @@ app.get("/example", jwtCheck, example.get);
 app.post("/example", jwtCheck, example.post);
 app.get("/connection", connection.get);
 app.post("/connection", connection.post);
+app.post('/findPaths', connection.findPaths);
 app.get("/connectionsByDate", connectionsByDate.get);
 app.get("/ticket", jwtCheck, ticket.get);
 app.post("/ticket", ticket.post);
