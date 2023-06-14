@@ -2,7 +2,6 @@ import { FC, useEffect, useState} from "react";
 import { z } from "zod";
 import { fetchClientPost } from "@/services/fetchClient";
 import SearchForm from "@/components/SearchForm";
-import { useUser } from '@auth0/nextjs-auth0/client';
 
 
 const Connections: FC = () => {
@@ -11,7 +10,6 @@ const Connections: FC = () => {
       arrivalDate: string }>>([]);
   const [selectedPathIndex, setSelectedPathIndex] = useState<number | null>(null);
   const [passengers, setPassengers] = useState<Array<{ name: string, discount: string, seat: string, status: string }>>([]);
-  const { user } = useUser();
 
 
   // Routes finding
@@ -105,13 +103,11 @@ const Connections: FC = () => {
       console.error("No path selected");
       return;
     }
-    const email = user?.email;
     
     for (const connectionId of paths[selectedPathIndex].connectionIds){
       const response = await fetchClientPost({
       endpoint: 'api/ticket',
       body: {
-        email: email,
         connectionId: connectionId,
         passengers: passengers,
         price: paths[selectedPathIndex].totalPrice

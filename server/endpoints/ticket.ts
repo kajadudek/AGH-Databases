@@ -1,10 +1,8 @@
-import express, { RequestHandler } from "express";
+import { RequestHandler } from "express";
 import { prisma } from "./prisma";
 import { z } from "zod";
 import { PassengerSimplyfied } from "../types";
-// import { Discount } from "@prisma/client";
-
-// const app = express();
+import { getUser } from "../getUser";
 
 const passengerSchema = z.object({
   name: z.string(),
@@ -20,6 +18,7 @@ const postSchema = z.object({
 });
 
 const post: RequestHandler = async (req, res) => {
+  const authUser = await getUser(req.auth);
   const data = postSchema.parse(req.body);
   const connection = await prisma.connection.findUnique({
     where: {
@@ -70,7 +69,7 @@ const post: RequestHandler = async (req, res) => {
       passengers: data.passengers,
       user: {
         connect: {
-          email: data.email,
+          email: authUser?.email,
         },
       },
       connection: {

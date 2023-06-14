@@ -34,16 +34,10 @@ const SearchForm: FC<SearchFormProps> = ({onSubmit}) => {
         <div className="flex flex-col">
           <input
             ref={departureInputRef}
-            className="rounded-md border-2 mr-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
+            className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
             type="search"
             name="search"
             placeholder="Departure Station"
-          />
-          <input
-            className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
-            type="date"
-            name="date"
-            placeholder="Date"
           />
           <input
             ref={departureTimeInputRef}
@@ -56,16 +50,10 @@ const SearchForm: FC<SearchFormProps> = ({onSubmit}) => {
         <div className="flex flex-col">
           <input
             ref={arrivalInputRef}
-            className="rounded-md border-2 mr-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
+            className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
             type="search"
             name="search"
             placeholder="Arrival Station"
-          />
-          <input
-            className="rounded-md border-2 ml-2 border-gray-300 bg-white h-10 px-5 pr-16 text-sm focus:outline-none"
-            type="date"
-            name="date"
-            placeholder="Date"
           />
           <input
             ref={arrivalTimeInputRef}

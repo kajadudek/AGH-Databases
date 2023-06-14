@@ -1,6 +1,7 @@
 import express, { RequestHandler } from "express";
 import { prisma } from "./prisma";
 import { SeatType } from "@prisma/client";
+import { Path } from "../types";
 
 const app = express();
 
@@ -89,19 +90,6 @@ const getConnections = async (): Promise<Connection[]> => {
   }));
   return data;
 };
-
-// Finds all paths (has regard to arrival and departure time of trains)
-type Path = {
-  stations: string[];
-  travelTime: number; // hours
-  arrivalTime: number; // time in milliseconds
-  departureTime: number;
-  totalPrice: number;
-  connectionIds: string[];
-  departureDate: Date;
-  arrivalDate: Date;
-};
-
 
 export const findAllPaths = async (
   start: string,
