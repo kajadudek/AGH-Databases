@@ -1,9 +1,10 @@
 import express, { RequestHandler } from "express";
 import { prisma } from "./prisma";
 import { z } from "zod";
-import { Discount } from "@prisma/client";
+import { PassengerSimplyfied } from "../types";
+// import { Discount } from "@prisma/client";
 
-const app = express();
+// const app = express();
 
 const passengerSchema = z.object({
   name: z.string(),
@@ -69,7 +70,7 @@ const post: RequestHandler = async (req, res) => {
       passengers: data.passengers,
       user: {
         connect: {
-          id: buyer.id,
+          email: data.email,
         },
       },
       connection: {
@@ -104,14 +105,9 @@ export default {
   post,
 };
 
-type Passenger = {
-  name: string,
-  discount: Discount,
-  seat: string,
-  status: string
-}
 
-const calculateTicketPrice = async (passengers: Passenger[], ticketPrice: number) => {
+
+const calculateTicketPrice = async (passengers: PassengerSimplyfied[], ticketPrice: number) => {
   let totalPrice = 0;
 
   for (let passenger of passengers) {
