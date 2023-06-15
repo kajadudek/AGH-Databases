@@ -1,11 +1,10 @@
-# AGH-Databases-TicketReservationProject
+# System zamawiania biletów kolejowych
 ## Autorzy
 
 Kaja Dudek kwdudek@student.agh.edu.pl<br />
 Natalia Adamiak nadamiak@student.agh.edu.pl<br />
 Izabella Rosikoń rosikon@student.agh.edu.pl<br />
 
-# System zamawiania biletów kolejowych
 
 ## Spis treści
 - [Opis](#opis)
@@ -39,10 +38,10 @@ Celem tego projektu jest stworzenie systemu umożliwiającego zamawianie biletó
 - `enum Discount`: określa rodzaj zniżki przysługujący danej osobie.
 - `model DiscountValue`: reprezentuje wartość zniżki w postaci zmiennoprzecinkowej (wartość z zakresu 0-1, zniżka 0.4 określa zniżkę o wartości 40%)
 - `type Passenger`: reprezentuje pasażera, określa rodzaj zniżki mu przysługującej, typ miejsca i status miejsce. 
-- `User`: reprezentuje użytkownika systemu, zawiera informacje o adresie e-mail użytkownika oraz przypisane bilety.
-- `Ticket`: reprezentuje bilet, zawiera informacje o pasażerach przypisanych do biletu, połączeniu, cenie i osobie, która dokonała zakupu biletu.
-- `Connection`: reprezentuje połączenie kolejowe (pociąg) między dwiema stacjami. Zawiera informacje o liczbie miejsc, czasie odjazdu i przyjazdu, stacjach oraz cenie bez uwzględnienia zniżek.
-- `Station`: reprezentuje informacje o stacji, takie jak nazwa, miasto i kraj.
+- `model User`: reprezentuje użytkownika systemu, zawiera informacje o adresie e-mail użytkownika oraz przypisane bilety.
+- `model Ticket`: reprezentuje bilet, zawiera informacje o pasażerach przypisanych do biletu, połączeniu, cenie i osobie, która dokonała zakupu biletu.
+- `model Connection`: reprezentuje połączenie kolejowe (pociąg) między dwiema stacjami. Zawiera informacje o liczbie miejsc, czasie odjazdu i przyjazdu, stacjach oraz cenie bez uwzględnienia zniżek.
+- `type Station`: reprezentuje informacje o stacji, takie jak nazwa, miasto i kraj.
 
 Więcej szczegółów na temat modeli danych można znaleźć w pliku `schema.prisma`.
 
@@ -69,8 +68,6 @@ Więcej szczegółów na temat modeli danych można znaleźć w pliku `schema.pr
 - Endpoint GET: zwraca bilet o podanym id.
 - Funkcja calculateTicketPrice: zwraca łączną wartość biletu na podstawie liczby osób, zniżek i ceny  połączenia
 
-
-
 ### `tickets.ts`
 
 - Endpoint GET: zwraca bilet na podstawie przekazanego ID.
@@ -86,13 +83,13 @@ Więcej szczegółów na temat modeli danych można znaleźć w pliku `schema.pr
 
 ## Widoki strony
 
-- Wyszukiwanie połączeń kolejowych między stacjami.
+### Wyszukiwanie połączeń kolejowych między stacjami.
 ![352446165_1301329084098465_5122955641258742088_n](https://github.com/kajadudek/AGH-Databases/assets/72348810/034496b8-2fa7-418e-b07f-b2c1a9cd4358)
 
-- Wyświetlanie biletów przypisanych do użytkownika.
+### Wyświetlanie biletów przypisanych do użytkownika.
 ![351624944_1196264161043918_8898082919172478209_n](https://github.com/kajadudek/AGH-Databases/assets/72348810/032e4c1f-7a14-4404-89c9-ba59d8dab6d4)
 
-- Logowanie użytkownika.
+### Autentykacja za pomocą auth()
 ![351529607_813470589941352_1543353196092975388_n](https://github.com/kajadudek/AGH-Databases/assets/72348810/8ded3e0a-7f1b-486d-a996-4a9dfa589e60)
 
 
