@@ -6,7 +6,8 @@ Natalia Adamiak nadamiak@student.agh.edu.pl<br />
 Izabella Rosikoń rosikon@student.agh.edu.pl<br />
 
 
-## Spis treści
+### Spis treści
+-[Konfiguracja projektu](#konfiguracja-projektu)
 - [Autorzy](#autorzy)
 - [Opis](#opis)
 - [Technologie](#technologie)
@@ -14,6 +15,13 @@ Izabella Rosikoń rosikon@student.agh.edu.pl<br />
 - [Transakcje bazodanowe - endpointy](#transakcje-bazodanowe---endpointy-i-funkcje)
 - [Widoki strony](#widoki-strony)
 - [Baza danych](#baza-danych)
+
+## Konfiguracja projektu
+
+Podane niżej komendy należy wpisać w terminalu na poziomie folderu 'server' i 'client'
+1. npm install yarn
+2. yarn
+3. yarn dev
 
 
 ## Opis
