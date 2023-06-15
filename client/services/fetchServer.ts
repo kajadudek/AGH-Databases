@@ -31,20 +31,16 @@ export const fetchServer = async ({
     }
 > => {
   let accessToken: string | undefined;
-  console.log("fetchServer function called");
   try {
     const data = await getAccessToken(req, res);
     accessToken = data?.accessToken;
   } catch (err) {
     return { ok: false, error: "Unauthorized" };
   }
-  console.log("accessToken: ", accessToken);
   const { BACKEND_URL } = process.env;
-  console.log("BACKEND_URL: ", BACKEND_URL);
   if (!BACKEND_URL) {
     throw new Error("BACKEND_URL is not defined");
   }
-  console.log("id: ", req.body.ticketId);
   const headers = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : undefined;
@@ -56,8 +52,6 @@ export const fetchServer = async ({
       },
       body: body ? JSON.stringify(body) : undefined,
     });
-    console.log("response: ", response.body);
-    console.log("respone.ok: ", response.ok);
   if (response.status === 401) {
     return { ok: false, error: "Unauthorized" };
   }

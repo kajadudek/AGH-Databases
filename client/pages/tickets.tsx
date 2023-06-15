@@ -58,7 +58,7 @@ const Tickets: FC = () => {
     <div className="p-5 my-5">
       <ul>{tickets.length ? 
       tickets.map((ticket => 
-        <div className="flex flex-row border-2 border-orange-500 align-middle justify-center ">
+        <div key={ticket.id} className="flex flex-row border-2 border-orange-500 align-middle justify-center ">
         <div>
         <li className="w-150 mx-2 p-2">{ticket.id}</li>
         <li className="w-150 mx-2 p-2">{ticket.connectionName}</li>
