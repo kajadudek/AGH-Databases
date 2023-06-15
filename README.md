@@ -42,15 +42,95 @@ Celem tego projektu jest stworzenie systemu umożliwiającego zamawianie biletó
 ### Modele Prisma
 
 - `enum SeatType`: określa typ wagonu w jakim znajduje się miejsce siedzące - może być to miejsce w wagonie otwartym (bezprzedziałowym) lub przedziałowym.
+ ```javascript
+enum SeatType {
+  COMPARTMENT,
+  OPEN
+}
+```
 - `enum SeatStatus`: określa, czy dane miejsce jest aktualnie wykupione, czy zostało zwrócone.
+ ```javascript
+ enum SeatStatus {
+  ACTIVE,
+  RETURNED
+}
+```
 - `type Seats`: określa liczbę wolnych i zarezerwowanych miejsc dla danego typu przedziału.
+ ```javascript
+ type Seats {
+  available Int
+  booked    Int
+  type      SeatType @default(OPEN)
+}
+```
 - `enum Discount`: określa rodzaj zniżki przysługujący danej osobie.
+ ```javascript
+ enum Discount {
+  NONE,
+  STUDENT,
+  SENIOR,
+  CHILD
+}
+```
 - `model DiscountValue`: reprezentuje wartość zniżki w postaci zmiennoprzecinkowej (wartość z zakresu 0-1, zniżka 0.4 określa zniżkę o wartości 40%)
+ ```javascript
+ model DiscountValue {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  discount Discount
+  value    Float
+}
+```
 - `type Passenger`: reprezentuje pasażera, określa rodzaj zniżki mu przysługującej, typ miejsca i status miejsce. 
+ ```javascript
+ type Passenger {
+  name     String
+  discount Discount
+  seat     SeatType
+  status   SeatStatus
+}
+```
 - `model User`: reprezentuje użytkownika systemu, zawiera informacje o adresie e-mail użytkownika oraz przypisane bilety.
+ ```javascript
+ model User {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String   @unique
+  tickets Ticket[]
+}
+```
 - `model Ticket`: reprezentuje bilet, zawiera informacje o pasażerach przypisanych do biletu, połączeniu, cenie i osobie, która dokonała zakupu biletu.
+ ```javascript
+ model Ticket {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  passengers   Passenger[]
+  user         User        @relation(fields: [userID], references: [id])
+  userID       String      @map("userID") @db.ObjectId
+  connection   Connection  @relation(fields: [connectionID], references: [id])
+  connectionID String      @map("connectionID") @db.ObjectId
+  price        Float
+}
+```
 - `model Connection`: reprezentuje połączenie kolejowe (pociąg) między dwiema stacjami. Zawiera informacje o liczbie miejsc, czasie odjazdu i przyjazdu, stacjach oraz cenie bez uwzględnienia zniżek.
+ ```javascript
+ model Connection {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  capacity         Seats[]
+  tickets          Ticket[]
+  departure        DateTime
+  departureStation Station
+  arrival          DateTime
+  arrivalStation   Station
+  price            Float
+}
+```
 - `type Station`: reprezentuje informacje o stacji, takie jak nazwa, miasto i kraj.
+ ```javascript
+ type Station {
+  name    String
+  city    String
+  country String
+}
+```
 
 Więcej szczegółów na temat modeli danych można znaleźć w pliku [schema.prisma](server/prisma/schema.prisma).
 
