@@ -44,7 +44,7 @@ Celem tego projektu jest stworzenie systemu umożliwiającego zamawianie biletó
 - `model Connection`: reprezentuje połączenie kolejowe (pociąg) między dwiema stacjami. Zawiera informacje o liczbie miejsc, czasie odjazdu i przyjazdu, stacjach oraz cenie bez uwzględnienia zniżek.
 - `type Station`: reprezentuje informacje o stacji, takie jak nazwa, miasto i kraj.
 
-Więcej szczegółów na temat modeli danych można znaleźć w pliku [schema.prisma](server/prisma).
+Więcej szczegółów na temat modeli danych można znaleźć w pliku [schema.prisma](server/prisma/schema.prisma).
 
 ## Transakcje bazodanowe - endpointy i funkcje
 
