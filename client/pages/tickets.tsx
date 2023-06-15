@@ -1,4 +1,4 @@
-import { fetchClient } from "@/services/fetchClient";
+import { fetchClient, fetchClientDelete } from "@/services/fetchClient";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { FC, use, useEffect, useState } from "react";
 import { z } from "zod";
@@ -16,6 +16,20 @@ type TicketElement = {
 }
 
 const Tickets: FC = () => {
+  const handleDeleteTicket = async (id: string) => {
+    console.log("id: ", id);
+    const response = await fetchClientDelete({
+      endpoint: '/api/deleteTicket',
+      body: { ticketId: id },
+      schema: z.object({ ticketId: z.string() }),
+    });
+    console.log("id: ", id);
+    if (!response.ok) {
+      console.error(response.error);
+    } else {
+      window.location.reload();
+    }
+  }
   const [tickets, setData] = useState<TicketElement[]>([]);
   useEffect(() => {
     fetchClient({
@@ -64,7 +78,7 @@ const Tickets: FC = () => {
           </div>
         ))}</ul>
         </div>
-        <button className="bg-orange-500 hover:bg-blue-700 text-white mt-4 font-bold h-20 w-20 rounded">Return</button>
+        <button className="bg-orange-500 hover:bg-blue-700 text-white mt-4 font-bold h-20 w-20 rounded" onClick={() => handleDeleteTicket(ticket.id)}>Return</button>
         </div>
       
       )) : "No tickets"}</ul>
