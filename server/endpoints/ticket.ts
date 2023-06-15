@@ -95,7 +95,7 @@ export default {
 
 
 
-const calculateTicketPrice = async (passengers: PassengerSimplyfied[], ticketPrice: number) => {
+export const calculateTicketPrice = async (passengers: PassengerSimplyfied[], ticketPrice: number) => {
   let totalPrice = 0;
 
   for (let passenger of passengers) {
