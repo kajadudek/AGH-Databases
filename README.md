@@ -5,7 +5,7 @@ Kaja Dudek kwdudek@student.agh.edu.pl<br />
 Natalia Adamiak nadamiak@student.agh.edu.pl<br />
 Izabella Rosikoń rosikon@student.agh.edu.pl<br />
 
-Technologies: React, MongoDB
+Technologies: Next.js, Express.js, MongoDB
 
 ToDo:
 

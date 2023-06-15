@@ -3,7 +3,19 @@ import { prisma } from "./prisma";
 import { z } from "zod";
 import { PassengerSimplyfied } from "../types";
 import { getUser } from "../getUser";
-import { passengerSchema, postSchema } from "../types";
+
+const passengerSchema = z.object({
+  name: z.string(),
+  discount: z.enum(["NONE", "CHILD", "STUDENT", "SENIOR"]),
+  seat: z.enum(["OPEN", "COMPARTMENT"]),
+  status: z.enum(["ACTIVE", "RETURNED"]),
+});
+
+const postSchema = z.object({
+  email: z.string().email(),
+  connectionId: z.string(),
+  passengers: z.array(passengerSchema),
+});
 
 const post: RequestHandler = async (req, res) => {
   const authUser = await getUser(req.auth);
@@ -17,42 +29,7 @@ const post: RequestHandler = async (req, res) => {
     return res.status(500).json({ error: "Connection not found" });
   }
 
-  // Calculate how many seats ticket will take
-  const compartmentPassengers = data.passengers.filter((passenger) => passenger.seat === "COMPARTMENT").length;
-  const openPassengers = data.passengers.filter((passenger) => passenger.seat === "OPEN").length;
-
-  const compartmentCapacity = connection.capacity.find((capacity) => capacity.type === "COMPARTMENT");
-  const openCapacity = connection.capacity.find((capacity) => capacity.type === "OPEN");
-
-  if (!compartmentCapacity || compartmentCapacity.available < compartmentPassengers) {
-    return res.status(400).json({ error: "Not enough compartment seats available" });
-  }
-
-  if (!openCapacity || openCapacity.available < openPassengers) {
-    return res.status(400).json({ error: "Not enough open seats available" });
-  }
-
-  compartmentCapacity.available -= compartmentPassengers;
-  compartmentCapacity.booked += compartmentPassengers;
-
-  openCapacity.available -= openPassengers;
-  openCapacity.booked += openPassengers;
-
-  // Calculate total price of ticket
-  const totalPrice = await calculateTicketPrice(data.passengers, req.body.price);
-
-  // Change the capacity of train
-  const updateConnection = prisma.connection.update({
-    where: {
-      id: data.connectionId,
-    },
-    data: {
-      capacity: connection.capacity,
-    },
-  });
-
-  // Create tickets
-  const createTicket = prisma.ticket.create({
+  const ticket = await prisma.ticket.create({
     data: {
       passengers: data.passengers,
       user: {

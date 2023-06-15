@@ -1,7 +1,6 @@
-import express, { RequestHandler } from "express";
+import { RequestHandler } from "express";
 import { prisma } from "./prisma";
 
-const app = express();
 
 const get: RequestHandler = async (req, res) => {
   let connections;
@@ -18,7 +17,6 @@ const get: RequestHandler = async (req, res) => {
     connections = await prisma.connection.findMany({
       where: {
         arrival: { gte: req.body.arrivalMin, lte: req.body.arrivalMax },
-
         arrivalStation: req.body.arrivalStation,
         price: { gte: req.body.priceMin, lte: req.body.priceMax },
       },

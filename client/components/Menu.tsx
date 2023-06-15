@@ -13,6 +13,9 @@ const Menu: FC = () => {
       <Link className="p-2" href={"/connections"}>
         Connections
       </Link>
+      <Link className="p-2" href={"/tickets"}>
+        Tickets
+      </Link>
     </nav>
   );
 };
