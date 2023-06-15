@@ -15,6 +15,18 @@ type TicketElement = {
   passengers: PassengerSimplyfied2[]
 }
 
+const deleteTicket = async (id: string) => {
+  const response = await fetchClient({
+    endpoint: `/api/tickets/${id}`,
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    console.error(response.error);
+  } else {
+    window.location.reload();
+  }
+}
+
 const Tickets: FC = () => {
   const [tickets, setData] = useState<TicketElement[]>([]);
   useEffect(() => {
