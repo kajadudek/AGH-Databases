@@ -7,6 +7,7 @@ import { jwtCheck } from "./auth";
 import env from "./env";
 import ticket from "./endpoints/ticket";
 import tickets from "./endpoints/tickets";
+import updateTicket from "./endpoints/updateTicket";
 
 const app: Express = express();
 const port = env.PORT;
@@ -25,6 +26,8 @@ app.post('/findPaths', connection.findPaths);
 app.get("/connectionsByDate", connectionsByDate.get);
 app.get("/ticket", jwtCheck, ticket.get);
 app.post("/ticket", ticket.post);
+app.put("/ticket", jwtCheck, updateTicket.updateTicket);
+app.delete("/ticket", jwtCheck, updateTicket.deleteTicket);
 app.get("/tickets", jwtCheck, tickets.get);
 app.get("/user", user.get);
 app.post("/user", user.post);
