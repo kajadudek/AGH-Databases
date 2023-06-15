@@ -3,19 +3,7 @@ import { prisma } from "./prisma";
 import { z } from "zod";
 import { PassengerSimplyfied } from "../types";
 import { getUser } from "../getUser";
-
-const passengerSchema = z.object({
-  name: z.string(),
-  discount: z.enum(["NONE", "CHILD", "STUDENT", "SENIOR"]),
-  seat: z.enum(["OPEN", "COMPARTMENT"]),
-  status: z.enum(["ACTIVE", "RETURNED"]),
-});
-
-const postSchema = z.object({
-  email: z.string().email(),
-  connectionId: z.string(),
-  passengers: z.array(passengerSchema),
-});
+import { passengerSchema, postSchema } from "../types";
 
 const post: RequestHandler = async (req, res) => {
   const authUser = await getUser(req.auth);
@@ -99,6 +87,7 @@ const get: RequestHandler = async (req, res) => {
   return res.json(ticket);
 };
 
+
 export default {
   get,
   post,
@@ -106,7 +95,7 @@ export default {
 
 
 
-const calculateTicketPrice = async (passengers: PassengerSimplyfied[], ticketPrice: number) => {
+export const calculateTicketPrice = async (passengers: PassengerSimplyfied[], ticketPrice: number) => {
   let totalPrice = 0;
 
   for (let passenger of passengers) {
