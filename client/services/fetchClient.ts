@@ -67,11 +67,14 @@ export const fetchClientDelete = async <T>({
   endpoint,
   body,
   schema,
-}: FetchClientDelete<T>): Promise<
+}:
+FetchClientDelete<T>): Promise<
+
   { error: string; ok: false } | { ok: true; data: T }
 > => {
+  console.log("fetchClientDelete function called");
   const res = await fetch(endpoint, {
-    method: 'DELETE',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   }) as Response;
@@ -88,4 +91,4 @@ export const fetchClientDelete = async <T>({
   }
   
   return { error: parsedData.error.message, ok: false };
-};
+}

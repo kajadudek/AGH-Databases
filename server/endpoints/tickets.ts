@@ -26,7 +26,7 @@ const get: RequestHandler = async (req, res) => {
       },
     },
   });
-  // console.log({tickets});
+
   const data = tickets.map(async (ticket: Ticket) => {
     const train = getConnection(ticket.connectionID);
     if (!train) {
@@ -49,13 +49,9 @@ const get: RequestHandler = async (req, res) => {
         };
       }),
     };
-    newTicket.passengers.forEach(element => {
-      console.log(element);
-    });
     return newTicket;
   });
   const ticketsArray = await Promise.all(data);
-  console.log({ticketsArray});
   return res.json({ticketsArray});
 };
 

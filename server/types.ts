@@ -52,3 +52,8 @@ export const postSchema = z.object({
   connectionId: z.string(),
   passengers: z.array(passengerSchema),
 });
+
+export const putSchema = z.object({
+  ticketId: z.string(),
+  passengers: z.array(passengerSchema),
+});

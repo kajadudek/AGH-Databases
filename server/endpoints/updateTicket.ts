@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
 import { prisma } from "./prisma";
-import { passengerSchema, postSchema } from "../types";
+import { passengerSchema, postSchema, putSchema } from "../types";
 import {calculateTicketPrice} from "./ticket";
 
 const deleteTicket: RequestHandler = async (req, res) => {
-    const data = postSchema.parse(req.body);
+    console.log("deleteTicket");
     const ticket = await prisma.ticket.findUnique({
         where: {
             id: req.body.ticketId,
@@ -66,7 +66,7 @@ const deleteTicket: RequestHandler = async (req, res) => {
 
 
 const updateTicket: RequestHandler = async (req, res) => {
-    const data = postSchema.parse(req.body);
+    const data = putSchema.parse(req.body);
     const ticket = await prisma.ticket.findUnique({
         where: {
             id: req.body.ticketId,
@@ -77,7 +77,7 @@ const updateTicket: RequestHandler = async (req, res) => {
     }
     const connection = await prisma.connection.findUnique({
         where: {
-            id: data.connectionId,
+            id: ticket.connectionID,
         },
     });
     if (!connection) {
