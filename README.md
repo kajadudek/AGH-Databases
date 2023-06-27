@@ -124,7 +124,7 @@ Przykładowy obiekt
       "name": "Jane Smith",
       "discount": "NONE",
       "seat": "OPEN",
-      "status": "RETURNED"
+      "status": "ACTIVE"
     }
   ],
   "user": {
@@ -160,6 +160,7 @@ Przykładowy obiekt
     },
     "price": 29.99
   },
+  "connectionID": "1",
   "price": 44.69
 }
 ```
