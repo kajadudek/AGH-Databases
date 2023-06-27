@@ -7,7 +7,7 @@ Izabella Rosikoń rosikon@student.agh.edu.pl<br />
 
 
 ### Spis treści
--[Konfiguracja projektu](#konfiguracja-projektu)
+- [Konfiguracja projektu](#konfiguracja-projektu)
 - [Autorzy](#autorzy)
 - [Opis](#opis)
 - [Technologie](#technologie)
@@ -109,6 +109,60 @@ enum SeatType {
   price        Float
 }
 ```
+Przykładowy obiekt
+```
+{
+  "id": "1",
+  "passengers": [
+    {
+      "name": "John Doe",
+      "discount": "STUDENT",
+      "seat": "COMPARTMENT",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "Jane Smith",
+      "discount": "NONE",
+      "seat": "OPEN",
+      "status": "RETURNED"
+    }
+  ],
+  "user": {
+    "id": "1",
+    "email": "example@example.com"
+  },
+  "connection": {
+    "id": "1",
+    "name": "Example Connection",
+    "capacity": [
+      {
+        "available": 50,
+        "booked": 10,
+        "type": "OPEN"
+      },
+      {
+        "available": 20,
+        "booked": 0,
+        "type": "COMPARTMENT"
+      }
+    ],
+    "departure": "2023-07-01T10:00:00Z",
+    "departureStation": {
+      "name": "Station A",
+      "city": "City A",
+      "country": "Country A"
+    },
+    "arrival": "2023-07-01T12:00:00Z",
+    "arrivalStation": {
+      "name": "Station B",
+      "city": "City B",
+      "country": "Country B"
+    },
+    "price": 29.99
+  },
+  "price": 44.69
+}
+```
 - `model Connection`: reprezentuje połączenie kolejowe (pociąg) między dwiema stacjami. Zawiera informacje o liczbie miejsc, czasie odjazdu i przyjazdu, stacjach oraz cenie bez uwzględnienia zniżek.
  ```javascript
  model Connection {
@@ -188,11 +242,11 @@ Więcej szczegółów na temat modeli danych można znaleźć w pliku [schema.pr
 
 ![scheama1](https://github.com/kajadudek/AGH-Databases/assets/72348810/112b0bea-0044-47e4-985b-e5380dc471e2)
 
-### Połączenia
+### Connections
 
 ![connections](https://github.com/kajadudek/AGH-Databases/assets/72348810/1e9927ed-b7f6-4f72-8e40-3fd470ac18a8)
 
-### Bilety
+### Tickets
 
 ![tickets](https://github.com/kajadudek/AGH-Databases/assets/72348810/e58d1e79-9361-45a2-8022-3e0e72da0655)
 
@@ -200,7 +254,7 @@ Więcej szczegółów na temat modeli danych można znaleźć w pliku [schema.pr
 
 ![discounts](https://github.com/kajadudek/AGH-Databases/assets/72348810/3bbfee29-9b0f-4238-b6df-a4b7d7b9b333)
 
-### Użytkownicy
+### Users
 
 ![user](https://github.com/kajadudek/AGH-Databases/assets/72348810/dd61bc9b-34b9-41e8-ae18-721c75c7aff0)
 
