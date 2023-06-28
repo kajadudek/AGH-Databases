@@ -109,6 +109,49 @@ enum SeatType {
   price        Float
 }
 ```
+Przykładowy obiekt - User
+```
+  {
+    "_id": {"$oid": "644d8b21ceccb2eb338410f4"},
+    "email": "jenna.doe@gee.com"
+  }
+```
+Przykładowy obiekt - Connection
+```
+  {
+    "_id": {"$oid": "645d7d9fb40f0c56de29092f"},
+    "arrival": {
+      "$date": "2029-03-01T08:30:00.000Z"
+    },
+    "arrivalStation": {
+      "name": "Tychy",
+      "city": "Tychy",
+      "country": "Poland"
+    },
+    "capacity": [
+      {
+        "available": 2,
+        "booked": 15,
+        "type": "COMPARTMENT"
+      },
+      {
+        "available": 1,
+        "booked": 10,
+        "type": "OPEN"
+      }
+    ],
+    "departure": {
+      "$date": "2029-03-01T08:00:00.000Z"
+    },
+    "departureStation": {
+      "name": "Katowice",
+      "city": "Katowice",
+      "country": "Poland"
+    },
+    "name": "Rocket",
+    "price": 8
+  }
+```
 Przykładowy obiekt - Ticket
 ```
   {
@@ -131,6 +174,26 @@ Przykładowy obiekt - Ticket
     "price": 52.15,
     "userID": {"$oid": "6486369f48ebf2f3944237a3"}
   }
+```
+Dokument Discount
+```
+[
+  {
+    "_id": {"$oid": "6486407ae15c5259f5c3a5d4"},
+    "discount": "STUDENT",
+    "value": 0.51
+  },
+  {
+    "_id": {"$oid": "64864095e15c5259f5c3a5d5"},
+    "discount": "CHILD",
+    "value": 0.37
+  },
+  {
+    "_id": {"$oid": "648640cae15c5259f5c3a5d6"},
+    "discount": "SENIOR",
+    "value": 0.4
+  }
+]
 ```
 - `model Connection`: reprezentuje połączenie kolejowe (pociąg) między dwiema stacjami. Zawiera informacje o liczbie miejsc, czasie odjazdu i przyjazdu, stacjach oraz cenie bez uwzględnienia zniżek.
  ```javascript
