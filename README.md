@@ -109,11 +109,52 @@ enum SeatType {
   price        Float
 }
 ```
+- `model Connection`: reprezentuje połączenie kolejowe (pociąg) między dwiema stacjami. Zawiera informacje o liczbie miejsc, czasie odjazdu i przyjazdu, stacjach oraz cenie bez uwzględnienia zniżek.
+ ```javascript
+ model Connection {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  capacity         Seats[]
+  tickets          Ticket[]
+  departure        DateTime
+  departureStation Station
+  arrival          DateTime
+  arrivalStation   Station
+  price            Float
+}
+```
+- `type Station`: reprezentuje informacje o stacji, takie jak nazwa, miasto i kraj.
+ ```javascript
+ type Station {
+  name    String
+  city    String
+  country String
+}
+```
 Przykładowy obiekt - User
 ```
   {
     "_id": {"$oid": "644d8b21ceccb2eb338410f4"},
-    "email": "jenna.doe@gee.com"
+    "email": "jenna.doe@gee.com"  {
+    "_id": {"$oid": "6486439be2e814cf5e793483"},
+    "connectionID": {"$oid": "647896d15ac911649cb70068"},
+    "passengers": [
+      {
+        "name": "passenger",
+        "discount": "STUDENT",
+        "seat": "OPEN",
+        "status": "ACTIVE"
+      },
+      {
+        "name": "passenger",
+        "discount": "NONE",
+        "seat": "OPEN",
+        "status": "ACTIVE"
+      }
+    ],
+    "price": 52.15,
+    "userID": {"$oid": "6486369f48ebf2f3944237a3"}
+  }
   }
 ```
 Przykładowy obiekt - Connection
@@ -194,28 +235,6 @@ Dokument Discount
     "value": 0.4
   }
 ]
-```
-- `model Connection`: reprezentuje połączenie kolejowe (pociąg) między dwiema stacjami. Zawiera informacje o liczbie miejsc, czasie odjazdu i przyjazdu, stacjach oraz cenie bez uwzględnienia zniżek.
- ```javascript
- model Connection {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  name             String
-  capacity         Seats[]
-  tickets          Ticket[]
-  departure        DateTime
-  departureStation Station
-  arrival          DateTime
-  arrivalStation   Station
-  price            Float
-}
-```
-- `type Station`: reprezentuje informacje o stacji, takie jak nazwa, miasto i kraj.
- ```javascript
- type Station {
-  name    String
-  city    String
-  country String
-}
 ```
 
 Więcej szczegółów na temat modeli danych można znaleźć w pliku [schema.prisma](server/prisma/schema.prisma).
