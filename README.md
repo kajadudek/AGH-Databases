@@ -109,60 +109,28 @@ enum SeatType {
   price        Float
 }
 ```
-Przykładowy obiekt
+Przykładowy obiekt - Ticket
 ```
-{
-  "id": "1",
-  "passengers": [
-    {
-      "name": "John Doe",
-      "discount": "STUDENT",
-      "seat": "COMPARTMENT",
-      "status": "ACTIVE"
-    },
-    {
-      "name": "Jane Smith",
-      "discount": "NONE",
-      "seat": "OPEN",
-      "status": "ACTIVE"
-    }
-  ],
-  "user": {
-    "id": "1",
-    "email": "example@example.com"
-  },
-  "connection": {
-    "id": "1",
-    "name": "Example Connection",
-    "capacity": [
+  {
+    "_id": {"$oid": "6486439be2e814cf5e793483"},
+    "connectionID": {"$oid": "647896d15ac911649cb70068"},
+    "passengers": [
       {
-        "available": 50,
-        "booked": 10,
-        "type": "OPEN"
+        "name": "passenger",
+        "discount": "STUDENT",
+        "seat": "OPEN",
+        "status": "ACTIVE"
       },
       {
-        "available": 20,
-        "booked": 0,
-        "type": "COMPARTMENT"
+        "name": "passenger",
+        "discount": "NONE",
+        "seat": "OPEN",
+        "status": "ACTIVE"
       }
     ],
-    "departure": "2023-07-01T10:00:00Z",
-    "departureStation": {
-      "name": "Station A",
-      "city": "City A",
-      "country": "Country A"
-    },
-    "arrival": "2023-07-01T12:00:00Z",
-    "arrivalStation": {
-      "name": "Station B",
-      "city": "City B",
-      "country": "Country B"
-    },
-    "price": 29.99
-  },
-  "connectionID": "1",
-  "price": 44.69
-}
+    "price": 52.15,
+    "userID": {"$oid": "6486369f48ebf2f3944237a3"}
+  }
 ```
 - `model Connection`: reprezentuje połączenie kolejowe (pociąg) między dwiema stacjami. Zawiera informacje o liczbie miejsc, czasie odjazdu i przyjazdu, stacjach oraz cenie bez uwzględnienia zniżek.
  ```javascript
