@@ -289,24 +289,4 @@ Więcej szczegółów na temat modeli danych można znaleźć w pliku [schema.pr
 
 ![351529607_813470589941352_1543353196092975388_n](https://github.com/kajadudek/AGH-Databases/assets/72348810/8ded3e0a-7f1b-486d-a996-4a9dfa589e60)
 
-## Baza danych
-
-![scheama1](https://github.com/kajadudek/AGH-Databases/assets/72348810/112b0bea-0044-47e4-985b-e5380dc471e2)
-
-### Connections
-
-![connections](https://github.com/kajadudek/AGH-Databases/assets/72348810/1e9927ed-b7f6-4f72-8e40-3fd470ac18a8)
-
-### Tickets
-
-![tickets](https://github.com/kajadudek/AGH-Databases/assets/72348810/e58d1e79-9361-45a2-8022-3e0e72da0655)
-
-### Opis zniżek w bazie danych
-
-![discounts](https://github.com/kajadudek/AGH-Databases/assets/72348810/3bbfee29-9b0f-4238-b6df-a4b7d7b9b333)
-
-### Users
-
-![user](https://github.com/kajadudek/AGH-Databases/assets/72348810/dd61bc9b-34b9-41e8-ae18-721c75c7aff0)
-
 
