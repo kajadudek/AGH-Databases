@@ -14,7 +14,6 @@ Izabella Rosikoń rosikon@student.agh.edu.pl<br />
 - [Model danych](#model-danych)
 - [Transakcje bazodanowe - endpointy](#transakcje-bazodanowe---endpointy-i-funkcje)
 - [Widoki strony](#widoki-strony)
-- [Baza danych](#baza-danych)
 
 ## Konfiguracja projektu
 
@@ -22,6 +21,8 @@ Podane niżej komendy należy wpisać w terminalu na poziomie folderu 'server' i
 1. npm install yarn
 2. yarn
 3. yarn dev
+
+Dokładne instrukcje dotyczące konfiguracji pliku env oraz dodatkowych wymaganych paczek znajdują się w osobnych README w folderze client oraz server.
 
 
 ## Opis
